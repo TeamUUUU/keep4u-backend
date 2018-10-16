@@ -1,0 +1,102 @@
+Dock:
+  description: Complete dock schema
+  properties:
+    id:
+      description: Dock unique identifier
+      type: string
+      readOnly: true
+    title:
+      type: string
+      example: Buisness
+      description: Dock title
+    description:
+      type: string
+      example: Some buisness notes
+  required:
+  - id
+  - title
+  - created_at
+
+Docks:
+  type: array
+  items:
+    $ref: '#/Dock'
+
+Note:
+  description: Complete note schema
+  properties:
+    id:
+      description: Note unique identifier
+      type: string
+      readOnly: true
+    dock_id:
+      description: The dock to which the note belongs
+      type: string
+      readOnly: true
+    title:
+      description: Note title
+      type: string
+    content:
+      type: string
+      description: Note content(must be valid markdown)
+    created_at:
+      description: Dock creation unix timestamp
+      type: integer
+      format: int64
+      readOnly: true
+    attachments:
+      $ref: '#/Attachments'
+  required:
+  - content
+  - title
+
+NoteUpdate:
+  description: Partitial note update schema
+  properties:
+    title:
+      description: New note title
+      type: string
+    content:
+      type: string
+      description: New note content(must be valid markdown)
+    attachments:
+      $ref: '#/Attachments'
+
+Notes:
+  type: array
+  items:
+    $ref: '#/Note'
+
+
+Attachment:
+  description: Generalized attachment meta-information
+  properties:
+    kind:
+      description: Kind of attachemnt(link, picture, file)
+      type: string
+      readOnly: true
+      enum:
+      - link
+      - file
+      - pic
+    name:
+      description: attachment name
+      type: string
+      readOnly: true
+    url:
+      type: string
+      readOnly: true
+
+Attachments:
+  type: array
+  items:
+    $ref: '#/Note'
+
+Error:
+  required:
+  - message
+  properties:
+    message:
+      type: string
+
+

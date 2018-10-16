@@ -1,0 +1,30 @@
+get:
+  summary: Get attachment info by id
+  parameters:
+  - $ref: 'parameters.yml#/AttachmentID'
+  responses:
+    '200':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Attachment'
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'
+delete:
+  summary: Delete attachment info by id
+  parameters:
+  - $ref: 'parameters.yml#/AttachmentID'
+  responses:
+    '204':
+      description: Ok
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'

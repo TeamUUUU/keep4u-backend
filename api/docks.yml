@@ -1,0 +1,39 @@
+get:
+  summary: Get user docks
+  description: |
+    Gets all docks for current user
+  responses:
+    '200':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Docks'
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'
+post:
+  summary: Create new dock
+  description: |
+    Create new dock for current user
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: 'schemas.yml#/Dock'
+  responses:
+    '201':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Dock'
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'

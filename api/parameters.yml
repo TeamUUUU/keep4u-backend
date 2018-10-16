@@ -1,0 +1,23 @@
+NoteID:
+  schema:
+    type: string
+  in: path
+  name: note_id
+  required: true
+  description: UUID of note
+
+DockID:
+  schema:
+    type: string
+  in: path
+  name: dock_id
+  required: true
+  description: UUID of dock
+
+AttachmentID:
+  schema:
+    type: string
+  in: path
+  name: attachment_id
+  required: true
+  description: UUID of attachment

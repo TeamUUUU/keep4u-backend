@@ -1,0 +1,35 @@
+get:
+  summary: Get notes for dock
+  responses:
+    '200':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Notes'
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'
+post:
+  summary: Create new note on dock
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: 'schemas.yml#/Note'
+  responses:
+    '201':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Note'
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'

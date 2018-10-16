@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  version: "0.0.1"
+  title: keep4u rest api
+  description: keep4u backend rest api
+paths:
+  /docks:
+    $ref: 'docks.yml'
+  /docks/{dock_id}:
+    $ref: 'docks_id.yml'
+  /docks/{dock_id}/notes:
+    $ref: 'notes.yml'
+  /notes/{note_id}:
+    $ref: 'notes_id.yml'
+  /attachments:
+    $ref: 'attachments.yml'
+  /attachments/{attachment_id}:
+    $ref: 'attachments_id.yml'
+
+
+
+components:
+  parameters:
+    dock_id:
+      $ref: 'parameters.yml#/DockID'
+    note_id:
+      $ref: 'parameters.yml#/NoteID'
+    attachment_id:
+      $ref: 'parameters.yml#/AttachmentID'
+  schemas:
+    Dock:
+      $ref: 'schemas.yml#/Dock'
+    Note:
+      $ref: 'schemas.yml#/Note'
+    Docks:
+      $ref: 'schemas.yml#/Docks'
+    Notes:
+      $ref: 'schemas.yml#/Notes'
+    Attachment:
+      $ref: 'schemas.yml#/Attachment'
+    Attachments:
+      $ref: 'schemas.yml#/Attachments'
+    Error:
+      $ref: 'schemas.yml#/Error'
+

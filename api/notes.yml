@@ -1,5 +1,5 @@
 get:
-  summary: Get notes for dock
+  summary: Get notes for board
   responses:
     '200':
       description: Ok
@@ -14,7 +14,7 @@ get:
           schema:
             $ref: 'schemas.yml#/Error'
 post:
-  summary: Create new note on dock
+  summary: Create new note on board
   requestBody:
     content:
       application/json:

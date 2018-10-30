@@ -1,26 +1,35 @@
-Dock:
-  description: Complete dock schema
+Board:
+  description: Complete board schema
   properties:
     id:
-      description: Dock unique identifier
+      description: board unique identifier
       type: string
       readOnly: true
     title:
       type: string
       example: Buisness
-      description: Dock title
+      description: board title
     description:
       type: string
       example: Some buisness notes
+    collaboration:
+      $ref: '#/Collaboration'
   required:
   - id
   - title
   - created_at
 
-Docks:
+Collaboration:
+  type: array
+  description: collaborators ids
+  items:
+    type: string
+
+
+Boards:
   type: array
   items:
-    $ref: '#/Dock'
+    $ref: '#/Board'
 
 Note:
   description: Complete note schema
@@ -29,8 +38,8 @@ Note:
       description: Note unique identifier
       type: string
       readOnly: true
-    dock_id:
-      description: The dock to which the note belongs
+    board_id:
+      description: The board to which the note belongs
       type: string
       readOnly: true
     title:
@@ -40,7 +49,7 @@ Note:
       type: string
       description: Note content(must be valid markdown)
     created_at:
-      description: Dock creation unix timestamp
+      description: board creation unix timestamp
       type: integer
       format: int64
       readOnly: true

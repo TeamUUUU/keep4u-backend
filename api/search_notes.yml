@@ -1,0 +1,36 @@
+get:
+  summary: Search notes by related text
+  parameters:
+  - in: query
+    name: text
+    schema:
+      type: string
+      minLength: 5
+      maxLength: 50
+    required: true
+  - in: query
+    name: limit
+    schema:
+      type: integer
+      format: int32
+      default: 10
+      description: text to be searched in notes
+  - in: query
+    name: asc
+    schema:
+      type: boolean
+      defalut: false
+      description: should notes be returned in descending(default) or ascending order.
+  responses:
+    '200':
+      description: Notes ordered by creation date
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Notes'
+    '500':
+      description: Server internal error
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'

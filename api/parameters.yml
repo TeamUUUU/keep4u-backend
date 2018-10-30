@@ -6,13 +6,13 @@ NoteID:
   required: true
   description: UUID of note
 
-DockID:
+BoardID:
   schema:
     type: string
   in: path
-  name: dock_id
+  name: board_id
   required: true
-  description: UUID of dock
+  description: UUID of board
 
 AttachmentID:
   schema:

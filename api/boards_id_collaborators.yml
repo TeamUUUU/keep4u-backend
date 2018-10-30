@@ -1,0 +1,20 @@
+patch:
+  description: Adds collaborators to board. Returns all board's collaborators.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: 'schemas.yml#/Collaboration'
+  responses:
+    200:
+      description: Collaborators was successfully added
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Collaboration'
+    404:
+      description: Board not found
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'

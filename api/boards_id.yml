@@ -1,14 +1,14 @@
 get:
-  summary: Get dock by id
+  summary: Get board by id
   parameters:
-  - $ref: 'parameters.yml#/DockID'
+  - $ref: 'parameters.yml#/BoardID'
   responses:
     '200':
       description: Ok
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Dock'
+            $ref: 'schemas.yml#/Board'
     '500':
       description: Server internal error
       content:
@@ -17,23 +17,23 @@ get:
             $ref: 'schemas.yml#/Error'
 
 put:
-  summary: Replace dock
+  summary: Replace board
   parameters:
-  - $ref: 'parameters.yml#/DockID'
+  - $ref: 'parameters.yml#/BoardID'
   description: |
-    Update dock description
+    Update board description
   requestBody:
     content:
       application/json:
         schema:
-          $ref: 'schemas.yml#/Dock'
+          $ref: 'schemas.yml#/Board'
   responses:
     '200':
       description: Ok
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Dock'
+            $ref: 'schemas.yml#/Board'
     '500':
       description: Server internal error
       content:
@@ -42,9 +42,9 @@ put:
             $ref: 'schemas.yml#/Error'
 
 delete:
-  summary: Delete dock by id
+  summary: Delete board by id
   parameters:
-  - $ref: 'parameters.yml#/DockID'
+  - $ref: 'parameters.yml#/BoardID'
   responses:
     '204':
       description: Ok

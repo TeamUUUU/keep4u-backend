@@ -31,7 +31,7 @@ patch:
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Dock'
+            $ref: 'schemas.yml#/Board'
     '500':
       description: Server internal error
       content:
@@ -40,7 +40,7 @@ patch:
             $ref: 'schemas.yml#/Error'
 
 delete:
-  summary: Delete dock by id
+  summary: Delete note by id
   parameters:
   - $ref: 'parameters.yml#/NoteID'
   responses:

@@ -1,14 +1,14 @@
 get:
-  summary: Get user docks
+  summary: Get user boards
   description: |
-    Gets all docks for current user
+    Gets all boards for current user
   responses:
     '200':
       description: Ok
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Docks'
+            $ref: 'schemas.yml#/Boards'
     '500':
       description: Server internal error
       content:
@@ -16,21 +16,21 @@ get:
           schema:
             $ref: 'schemas.yml#/Error'
 post:
-  summary: Create new dock
+  summary: Create new board
   description: |
-    Create new dock for current user
+    Create new board for current user
   requestBody:
     content:
       application/json:
         schema:
-          $ref: 'schemas.yml#/Dock'
+          $ref: 'schemas.yml#/Board'
   responses:
     '201':
       description: Ok
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Dock'
+            $ref: 'schemas.yml#/Board'
     '500':
       description: Server internal error
       content:

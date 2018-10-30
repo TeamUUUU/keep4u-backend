@@ -13,4 +13,4 @@ ENV SWAGGER_JSON "/foo/api.bundle.yaml"
 
 EXPOSE 8080
 
-CMD ["sh", "/usr/share/nginx/docker-run.sh"]
+CMD ["sh", "/usr/share/nginx/boarder-run.sh"]

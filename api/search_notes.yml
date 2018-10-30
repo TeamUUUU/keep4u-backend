@@ -14,13 +14,13 @@ get:
       type: integer
       format: int32
       default: 10
-      description: text to be searched in notes
+    description: text to be searched in notes
   - in: query
     name: asc
     schema:
       type: boolean
-      defalut: false
-      description: should notes be returned in descending(default) or ascending order.
+      default: false
+    description: should notes be returned in descending(default) or ascending order.
   responses:
     '200':
       description: Notes ordered by creation date

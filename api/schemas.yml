@@ -12,6 +12,9 @@ Board:
     description:
       type: string
       example: Some buisness notes
+    owner:
+      type: string
+      description: Id of board owner
     collaboration:
       $ref: '#/Collaboration'
   required:

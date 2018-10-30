@@ -14,6 +14,14 @@ BoardID:
   required: true
   description: UUID of board
 
+UserID:
+  schema:
+    type: string
+  in: query
+  name: user_id
+  required: true
+  description: Google ClientID token
+
 AttachmentID:
   schema:
     type: string

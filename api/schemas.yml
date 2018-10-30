@@ -38,21 +38,30 @@ Note:
       description: Note unique identifier
       type: string
       readOnly: true
+      example: 550e8400-e29b-41d4-a716-446655440000
     board_id:
       description: The board to which the note belongs
       type: string
       readOnly: true
+      example: 60d45819-0c51-4865-b2bd-8b53b623873c
     title:
       description: Note title
       type: string
+      example: My note
     content:
       type: string
       description: Note content(must be valid markdown)
+      example: |
+        ###Some header
+        #### Some subheader
+          - example 0
+          - example 1
     created_at:
-      description: board creation unix timestamp
+      description: Note creation unix timestamp
       type: integer
       format: int64
       readOnly: true
+      example: 1540887812
     attachments:
       $ref: '#/Attachments'
   required:
@@ -84,6 +93,7 @@ Attachment:
       description: Kind of attachemnt(link, picture, file)
       type: string
       readOnly: true
+      example: pic
       enum:
       - link
       - file
@@ -91,15 +101,17 @@ Attachment:
     name:
       description: attachment name
       type: string
+      example: some_photo.jpg
       readOnly: true
     url:
       type: string
       readOnly: true
+      example: "http://188.246.233.13/static/some_photo.jpg"
 
 Attachments:
   type: array
   items:
-    $ref: '#/Note'
+    $ref: '#/Attachment'
 
 Error:
   required:

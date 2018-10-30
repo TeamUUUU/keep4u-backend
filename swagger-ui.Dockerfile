@@ -1,4 +1,4 @@
-FROM swaggerapi/swagger-ui:v3.19.0
+FROM swaggerapi/swagger-ui:latest
 
 RUN apk add --update nodejs
 RUN npm install -g swagger-cli
@@ -12,5 +12,3 @@ RUN swagger-cli validate api.yml && \
 ENV SWAGGER_JSON "/foo/api.bundle.yaml"
 
 EXPOSE 8080
-
-CMD ["sh", "/usr/share/nginx/boarder-run.sh"]

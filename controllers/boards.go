@@ -9,12 +9,12 @@ import (
 func (api *ApiService) CreateBoard(ctx *gin.Context) {
 	var boardCreate models.BoardCreate
 	if err := ctx.BindJSON(&boardCreate); err != nil {
-		ctx.JSON(http.StatusBadRequest, models.Error{Message: "fail to parse request"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to parse request"})
 		return
 	}
 	board, err := api.BoardsDAO.Create(&boardCreate)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.Error{Message: "fail to create board"})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to create board"})
 		return
 	}
 	ctx.JSON(http.StatusCreated, &board)
@@ -23,12 +23,12 @@ func (api *ApiService) CreateBoard(ctx *gin.Context) {
 func (api *ApiService) GetUserBoards(ctx *gin.Context) {
 	userID := ctx.Query("user_id")
 	if userID == "" {
-		ctx.JSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
 		return
 	}
 	boards, err := api.BoardsDAO.GetBoardsForUser(userID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.Error{Message: "fail to fetch user boards"})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to fetch user boards"})
 		return
 	}
 	ctx.JSON(http.StatusOK, &boards)
@@ -37,11 +37,11 @@ func (api *ApiService) GetUserBoards(ctx *gin.Context) {
 func (api *ApiService) GetBoard(ctx *gin.Context) {
 	boardID := ctx.Param("board_id")
 	if boardID == "" {
-		ctx.JSON(http.StatusBadRequest, models.Error{Message: "board_id parameter is missing"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "board_id parameter is missing"})
 	}
 	board, err := api.BoardsDAO.GetBoardById(boardID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.Error{Message: "fail to fetch board by id"})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to fetch board by id"})
 		return
 	}
 	ctx.JSON(http.StatusOK, board)

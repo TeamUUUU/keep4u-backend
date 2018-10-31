@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"github.com/TeamUUUU/keep4u-backend/controllers"
 	"github.com/TeamUUUU/keep4u-backend/services"
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"go.uber.org/zap"
 	"log"
+	"time"
 )
 
 func main() {
@@ -14,10 +16,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client, err := mongo.NewClient("mongodb://localhost:27017")
-	client.Connect(nil)
+	client, err := mongo.NewClient("mongodb://mongo:27017")
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	timeout, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	if err := client.Connect(timeout); err != nil {
+		log.Fatal(err)
+	}
+	if err := client.Ping(timeout, nil);
+		err != nil {
+		log.Fatal(err)
+
 	}
 	boardsDao := services.BoardsDao{
 		Db:             client,
@@ -41,5 +53,5 @@ func main() {
 	r.GET("/boards", api.GetUserBoards)
 	r.GET("/boards/:board_id", api.GetBoard)
 	r.GET("/boards/:board_id/notes", api.GetNotesForBoard)
-	r.Run()
+	r.Run(":8080")
 }

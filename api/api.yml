@@ -32,12 +32,16 @@ components:
     attachment_id:
       $ref: 'parameters.yml#/AttachmentID'
   schemas:
-    board:
+    Board:
       $ref: 'schemas.yml#/Board'
+    Collaboration:
+      $ref: 'schemas.yml#/Collaboration'
     Note:
       $ref: 'schemas.yml#/Note'
-    boards:
+    Boards:
       $ref: 'schemas.yml#/Boards'
+    NoteUpdate:
+      $ref: 'schemas.yml#/NoteUpdate'
     Notes:
       $ref: 'schemas.yml#/Notes'
     Attachment:

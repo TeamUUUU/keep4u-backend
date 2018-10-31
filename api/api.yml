@@ -47,3 +47,6 @@ components:
     Error:
       $ref: 'schemas.yml#/Error'
 
+servers:
+- description: SwaggerHub API Auto Mocking
+  url: http://dc.utkin.xyz:8081

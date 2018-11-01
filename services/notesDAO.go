@@ -44,10 +44,11 @@ func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 		return nil, err
 	}
 	notes := make(models.Notes, 0)
+	ctx := context.Background()
+	defer cur.Close(ctx)
 	for cur.Next(nil) {
 		var note models.Note
 		if err := cur.Decode(&note); err != nil {
-			cur.Close(nil)
 			return nil, err
 		}
 		notes = append(notes, &note)
@@ -56,6 +57,5 @@ func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 		nd.Logger.Error("cursor errored", zap.Error(err))
 		return nil, err
 	}
-	cur.Close(nil)
 	return notes, nil
 }

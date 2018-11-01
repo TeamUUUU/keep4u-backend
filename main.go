@@ -61,6 +61,8 @@ func main() {
 	}))
 	r.POST("/boards", api.CreateBoard)
 	r.POST("/boards/:board_id/notes", api.CreateNote)
+	r.DELETE("/notes/:note_id", api.DeleteNote)
+	r.PATCH("/notes/:note_id", api.UpdateNote)
 	r.GET("/boards", api.GetUserBoards)
 	r.GET("/boards/:board_id", api.GetBoard)
 	r.GET("/boards/:board_id/notes", api.GetNotesForBoard)

@@ -35,3 +35,31 @@ func (api *ApiService) GetNotesForBoard(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, boards)
 }
+
+func (api *ApiService) UpdateNote(ctx *gin.Context) {
+	var noteUpdate models.NoteUpdate
+	noteID := ctx.Param("note_id")
+	if noteID == "" {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "note_id parameter is missing"})
+		return
+	}
+	note, err := api.NotesDAO.UpdateNote(&noteUpdate)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{"fail to update note"})
+		return
+	}
+	ctx.JSON(http.StatusOK, note)
+}
+
+func (api *ApiService) DeleteNote(ctx *gin.Context) {
+	noteID := ctx.Param("note_id")
+	if noteID == "" {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "note_id parameter is missing"})
+		return
+	}
+	if err := api.NotesDAO.Delete(noteID); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{"fail to delete note"})
+		return
+	}
+	ctx.Status(http.StatusNoContent)
+}

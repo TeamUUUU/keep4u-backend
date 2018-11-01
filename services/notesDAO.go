@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"github.com/TeamUUUU/keep4u-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/mongo"
@@ -22,12 +23,13 @@ func (nd *NotesDAO) Collection() *mongo.Collection {
 }
 
 func (nd *NotesDAO) Create(noteCreate *models.NoteCreate) (*models.Note, error) {
+	now := time.Now().Unix()
 	note := models.Note{
 		NoteCreate: *noteCreate,
 		ID:         uuid.NewV4().String(),
-		CreatedAt:  time.Now().Unix(),
+		CreatedAt:  now,
+		ChangedAt:  now,
 	}
-
 	collection := nd.Collection()
 	_, err := collection.InsertOne(context.Background(), &note)
 	if err != nil {
@@ -58,4 +60,28 @@ func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 		return nil, err
 	}
 	return notes, nil
+}
+
+func (nd *NotesDAO) UpdateNote(noteUpdate *models.NoteUpdate) (*models.Note, error) {
+	noteUpdate.ChangedAt = time.Now().Unix()
+	res := nd.Collection().FindOneAndUpdate(nil, bson.NewDocument(bson.EC.String("_id", noteUpdate.ID)), noteUpdate)
+	var note models.Note
+	if err := res.Decode(&note); err != nil {
+		nd.Logger.Error("fail to perform update", zap.Error(err), zap.Any("new_value", noteUpdate))
+		return nil, err
+	}
+	return &note, nil
+}
+
+func (nd *NotesDAO) Delete(noteID string) (error) {
+	res, err := nd.Collection().DeleteOne(nil, bson.NewDocument(bson.EC.String("_id", noteID)))
+	if err != nil {
+		nd.Logger.Error("fail to delete", zap.Error(err), zap.String("note_id", noteID))
+		return err
+	}
+	if res.DeletedCount == 0 {
+		nd.Logger.Error("note not found", zap.String("note_id", noteID))
+		return fmt.Errorf("note not found")
+	}
+	return nil
 }

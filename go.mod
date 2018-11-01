@@ -1,6 +1,7 @@
 module github.com/TeamUUUU/keep4u-backend
 
 require (
+	github.com/gin-contrib/cors v0.0.0-20181008113111-488de3ec974f
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
 	github.com/go-stack/stack v1.8.0 // indirect

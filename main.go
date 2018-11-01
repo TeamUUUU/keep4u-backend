@@ -47,6 +47,7 @@ func main() {
 	api := controllers.ApiService{
 		BoardsDAO: &boardsDao,
 		NotesDAO:  &notesDAO,
+		Logger:    logger,
 	}
 	r := gin.Default()
 	// - Preflight requests cached for 12 hours
@@ -56,7 +57,7 @@ func main() {
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge: 12 * time.Hour,
+		MaxAge:           12 * time.Hour,
 	}))
 	r.POST("/boards", api.CreateBoard)
 	r.POST("/boards/:board_id/notes", api.CreateNote)

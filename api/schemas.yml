@@ -12,7 +12,7 @@ Board:
     description:
       type: string
       example: Some buisness notes
-    owner:
+    owner_id:
       type: string
       description: Id of board owner
     collaboration:

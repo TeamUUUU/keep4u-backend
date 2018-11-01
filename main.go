@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/TeamUUUU/keep4u-backend/controllers"
 	"github.com/TeamUUUU/keep4u-backend/services"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"go.uber.org/zap"
@@ -48,6 +49,15 @@ func main() {
 		NotesDAO:  &notesDAO,
 	}
 	r := gin.Default()
+	// - Preflight requests cached for 12 hours
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://188.246.233.13:8080", "https://188.246.233.13:8080", "http://localhost:8080"},
+		AllowMethods:     []string{"PUT", "PATCH", "POST"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge: 12 * time.Hour,
+	}))
 	r.POST("/boards", api.CreateBoard)
 	r.POST("/boards/:board_id/notes", api.CreateNote)
 	r.GET("/boards", api.GetUserBoards)

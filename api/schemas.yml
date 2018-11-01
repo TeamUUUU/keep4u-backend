@@ -65,6 +65,12 @@ Note:
       format: int64
       readOnly: true
       example: 1540887812
+    changed_at:
+      description: Note last update unix timestamp
+      type: integer
+      format: int64
+      readOnly: true
+      example: 1540887812
     attachments:
       $ref: '#/Attachments'
   required:

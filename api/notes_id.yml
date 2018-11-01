@@ -31,7 +31,7 @@ patch:
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Board'
+            $ref: 'schemas.yml#/Note'
     '500':
       description: Server internal error
       content:

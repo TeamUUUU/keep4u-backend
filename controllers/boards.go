@@ -3,12 +3,14 @@ package controllers
 import (
 	"github.com/TeamUUUU/keep4u-backend/models"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"net/http"
 )
 
 func (api *ApiService) CreateBoard(ctx *gin.Context) {
 	var boardCreate models.BoardCreate
 	if err := ctx.BindJSON(&boardCreate); err != nil {
+		api.Logger.Error("fail to bind json params", zap.Error(err))
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to parse request"})
 		return
 	}

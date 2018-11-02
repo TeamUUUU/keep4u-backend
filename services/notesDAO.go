@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"github.com/TeamUUUU/keep4u-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/core/option"
@@ -99,7 +98,7 @@ func (nd *NotesDAO) Delete(noteID string) (error) {
 	}
 	if res.DeletedCount == 0 {
 		nd.Logger.Error("note not found", zap.String("note_id", noteID))
-		return fmt.Errorf("note not found")
+		return mongo.ErrNoDocuments
 	}
 	return nil
 }

@@ -85,6 +85,10 @@ func (api *ApiService) DeleteNote(ctx *gin.Context) {
 		return
 	}
 	if err := api.NotesDAO.Delete(noteID); err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, models.Error{Message: "note with such id doesn't exists"})
+			return
+		}
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{"fail to delete note"})
 		return
 	}

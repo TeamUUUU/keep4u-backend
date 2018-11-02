@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/TeamUUUU/keep4u-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
+	"github.com/mongodb/mongo-go-driver/core/option"
 	"github.com/mongodb/mongo-go-driver/mongo"
+	"github.com/mongodb/mongo-go-driver/mongo/findopt"
 	"github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"time"
@@ -39,6 +41,16 @@ func (nd *NotesDAO) Create(noteCreate *models.NoteCreate) (*models.Note, error) 
 	return &note, nil
 }
 
+func (nd *NotesDAO) GetNote(noteID string) (*models.Note, error) {
+	res := nd.Collection().FindOne(nil, bson.NewDocument(bson.EC.String("_id", noteID)))
+	var note models.Note
+	if err := res.Decode(&note); err != nil {
+		nd.Logger.Error("fail to find note by note id", zap.Error(err), zap.String("note_id", noteID))
+		return nil, err
+	}
+	return &note, nil
+}
+
 func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 	cur, err := nd.Collection().Find(nil, bson.NewDocument(bson.EC.String("board_id", boardid)))
 	if err != nil {
@@ -62,17 +74,16 @@ func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 	return notes, nil
 }
 
-func (nd *NotesDAO) UpdateNote(noteUpdate *models.NoteUpdate) (*models.Note, error) {
+func (nd *NotesDAO) Update(noteUpdate *models.NoteUpdate) (*models.Note, error) {
 	noteUpdate.ChangedAt = time.Now().Unix()
-	marshalled, err := bson.Marshal(noteUpdate)
-	if err != nil {
-		nd.Logger.Error("fail to marshall note update", zap.Error(err))
-		return nil, err
-	}
+	partialUpdate := &models.NoteUpdate{ID: "some-note-id", Title: "Some new title"}
+	updateParam := SetWrapper{Set: partialUpdate}
 	res := nd.Collection().FindOneAndUpdate(nil,
 		bson.NewDocument(bson.EC.String("_id", noteUpdate.ID)),
-		bson.EC.SubDocumentFromElements("$set", bson.EC.FromBytes(marshalled)),
+		updateParam,
+		findopt.OptReturnDocument(option.After),
 	)
+
 	var note models.Note
 	if err := res.Decode(&note); err != nil {
 		nd.Logger.Error("fail to perform update", zap.Error(err), zap.Any("new_value", noteUpdate))

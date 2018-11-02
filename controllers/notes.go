@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/TeamUUUU/keep4u-backend/models"
 	"github.com/gin-gonic/gin"
+	"github.com/mongodb/mongo-go-driver/mongo"
 	"net/http"
 )
 
@@ -36,6 +37,26 @@ func (api *ApiService) GetNotesForBoard(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, boards)
 }
 
+func (api *ApiService) GetNote(ctx *gin.Context) {
+	noteID := ctx.Param("note_id")
+	if noteID == "" {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "note_id parameter is missing"})
+		return
+	}
+	note, err := api.NotesDAO.GetNote(noteID)
+	if err != nil {
+		switch err {
+		case mongo.ErrNoDocuments:
+			ctx.AbortWithStatusJSON(http.StatusNotFound, models.Error{Message: "note_id not found"})
+			return
+		default:
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to find note by note_id"})
+			return
+		}
+	}
+	ctx.JSON(http.StatusOK, note)
+}
+
 func (api *ApiService) UpdateNote(ctx *gin.Context) {
 	var noteUpdate models.NoteUpdate
 	noteID := ctx.Param("note_id")
@@ -43,7 +64,13 @@ func (api *ApiService) UpdateNote(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "note_id parameter is missing"})
 		return
 	}
-	note, err := api.NotesDAO.UpdateNote(&noteUpdate)
+	if err := ctx.BindJSON(&noteUpdate); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to parse json"})
+		return
+	}
+
+	noteUpdate.ID = noteID
+	note, err := api.NotesDAO.Update(&noteUpdate)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{"fail to update note"})
 		return

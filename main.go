@@ -17,19 +17,19 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client, err := mongo.NewClient("mongodb://mongo:27017")
+	client, err := mongo.NewClient("mongodb://localhost:27017")
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal("fail to setup mongo client", zap.Error(err))
 	}
 
 	timeout, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	if err := client.Connect(timeout); err != nil {
-		log.Fatal(err)
+		logger.Fatal("fail to connet to mongo", zap.Error(err))
 	}
 	if err := client.Ping(timeout, nil);
 		err != nil {
-		log.Fatal(err)
+		logger.Fatal("fail to ping mongo", zap.Error(err))
 
 	}
 	boardsDao := services.BoardsDao{
@@ -59,12 +59,25 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	r.POST("/boards", api.CreateBoard)
-	r.POST("/boards/:board_id/notes", api.CreateNote)
-	r.DELETE("/notes/:note_id", api.DeleteNote)
-	r.PATCH("/notes/:note_id", api.UpdateNote)
-	r.GET("/boards", api.GetUserBoards)
-	r.GET("/boards/:board_id", api.GetBoard)
-	r.GET("/boards/:board_id/notes", api.GetNotesForBoard)
-	r.Run(":8080")
+
+	boards := r.Group("/boards")
+	notes := r.Group("/notes")
+
+	boards.POST("/", api.CreateBoard)
+	boards.GET("/", api.GetUserBoards)
+
+	boards.GET("/:board_id", api.GetBoard)
+	boards.PUT("/:board_id", api.UpdateBoard)
+	boards.DELETE("/:board_id", api.DeleteBoard)
+
+	boards.GET("/:board_id/notes", api.GetNotesForBoard)
+	boards.POST("/:board_id/notes", api.CreateNote)
+
+	boards.PATCH("/:board_id/collaborators", api.UpdateBoardCollaborators)
+
+	notes.DELETE("/:note_id", api.DeleteNote)
+	notes.PATCH("/:note_id", api.UpdateNote)
+	notes.GET("/:note_id", api.GetNote)
+
+	r.Run(":8000")
 }

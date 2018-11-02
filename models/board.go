@@ -1,17 +1,31 @@
 package models
 
 type Board struct {
-	ID            string         `json:"id,omitempty" bson:"_id,omitempty"`
-	Collaboration Collaborations `json:"collaborations,omitempty" bson:"collaborations"`
-	BoardCreate `bson:",inline"`
+	ID            string        `json:"id,omitempty" bson:"_id,omitempty"`
+	Collaboration Collaborators `json:"collaborations,omitempty" bson:"collaborations,omitempty"`
+	CreatedAt     int64         `json:"created_at,omitempty" bson:"created_at,omitempty"`
+	ChangedAt     int64         `json:"changed_at,omitempty" bson:"changed_at,omitempty"`
+	BoardCreate   `bson:",inline"`
 }
 
 type BoardCreate struct {
 	Title       string `json:"title" bson:"title"`
-	OwnerID     string `json:"owner_id" binding:"required" bson:"owner_id"`
-	Description string `json:"description" bson:"description"`
+	OwnerID     string `json:"owner_id,omitempty" binding:"required" bson:"owner_id,omitempty"`
+	Description string `json:"description,omitempty" bson:"description,omitempty"`
+}
+
+type BoardUpdate struct {
+	ID                       string `json:"id,omitempty" bson:"_id, omitempty"`
+	Title                    string `json:"title,omitempty" bson:"title,omitempty"`
+	Description              string `json:"description,omitempty" bson:"description,omitempty"`
+	ChangedAt                int64  `json:"changed_at,omitempty" bson:"changed_at,omitempty"`
+	BoardCollaborationUpdate `bson:",inline"`
+}
+
+type BoardCollaborationUpdate struct {
+	Collaboration Collaborators `json:"collaborations,omitempty" bson:"collaborations,omitempty"`
 }
 
 type Boards []*Board
 
-type Collaborations []string
+type Collaborators []string

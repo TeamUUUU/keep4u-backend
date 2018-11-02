@@ -17,7 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client, err := mongo.NewClient("mongodb://localhost:27017")
+	client, err := mongo.NewClient("mongodb://mongo:27017")
 	if err != nil {
 		logger.Fatal("fail to setup mongo client", zap.Error(err))
 	}

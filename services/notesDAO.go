@@ -64,7 +64,15 @@ func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 
 func (nd *NotesDAO) UpdateNote(noteUpdate *models.NoteUpdate) (*models.Note, error) {
 	noteUpdate.ChangedAt = time.Now().Unix()
-	res := nd.Collection().FindOneAndUpdate(nil, bson.NewDocument(bson.EC.String("_id", noteUpdate.ID)), noteUpdate)
+	marshalled, err := bson.Marshal(noteUpdate)
+	if err != nil {
+		nd.Logger.Error("fail to marshall note update", zap.Error(err))
+		return nil, err
+	}
+	res := nd.Collection().FindOneAndUpdate(nil,
+		bson.NewDocument(bson.EC.String("_id", noteUpdate.ID)),
+		bson.EC.SubDocumentFromElements("$set", bson.EC.FromBytes(marshalled)),
+	)
 	var note models.Note
 	if err := res.Decode(&note); err != nil {
 		nd.Logger.Error("fail to perform update", zap.Error(err), zap.Any("new_value", noteUpdate))

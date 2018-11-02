@@ -16,8 +16,8 @@ type NoteCreate struct {
 
 type NoteUpdate struct {
 	ID        string `json:"id,omitempty" bson:"_id,omitempty"`
-	Title     string `json:"title" bson:"title"`
-	Content   string `json:"content" bson:"content"`
+	Title     string `json:"title" bson:"title,omitempty"`
+	Content   string `json:"content" bson:"content,omitempty"`
 	ChangedAt int64  `json:"changed_at" bson:"changed_at"`
 }
 

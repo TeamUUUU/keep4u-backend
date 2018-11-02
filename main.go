@@ -79,5 +79,5 @@ func main() {
 	notes.PATCH("/:note_id", api.UpdateNote)
 	notes.GET("/:note_id", api.GetNote)
 
-	r.Run(":8000")
+	r.Run(":8080")
 }

@@ -76,8 +76,7 @@ func (nd *NotesDAO) GetNotesForBoard(boardid string) (models.Notes, error) {
 
 func (nd *NotesDAO) Update(noteUpdate *models.NoteUpdate) (*models.Note, error) {
 	noteUpdate.ChangedAt = time.Now().Unix()
-	partialUpdate := &models.NoteUpdate{ID: "some-note-id", Title: "Some new title"}
-	updateParam := SetWrapper{Set: partialUpdate}
+	updateParam := SetWrapper{Set: noteUpdate}
 	res := nd.Collection().FindOneAndUpdate(nil,
 		bson.NewDocument(bson.EC.String("_id", noteUpdate.ID)),
 		updateParam,

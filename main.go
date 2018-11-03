@@ -63,8 +63,8 @@ func main() {
 	boards := r.Group("/boards")
 	notes := r.Group("/notes")
 
-	boards.POST("/", api.CreateBoard)
-	boards.GET("/", api.GetUserBoards)
+	boards.POST("", api.CreateBoard)
+	boards.GET("", api.GetUserBoards)
 
 	boards.GET("/:board_id", api.GetBoard)
 	boards.PUT("/:board_id", api.UpdateBoard)

@@ -53,7 +53,7 @@ func main() {
 	// - Preflight requests cached for 12 hours
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://188.246.233.13:8082", "https://188.246.233.13:8082", "http://localhost:8080", "http://localhost:3000"},
-		AllowMethods:     []string{"PUT", "PATCH", "POST"},
+		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length"},
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
 		AllowCredentials: true,

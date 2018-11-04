@@ -4,16 +4,22 @@ patch:
     content:
       application/json:
         schema:
-          $ref: 'schemas.yml#/Collaboration'
+          $ref: 'schemas.yml#/Collaborators'
   responses:
     200:
       description: Collaborators was successfully added
       content:
         application/json:
           schema:
-            $ref: 'schemas.yml#/Collaboration'
+            $ref: 'schemas.yml#/Collaborators'
     404:
       description: Board not found
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas.yml#/Error'
+    400:
+      description: Some of the request parameters is invalid
       content:
         application/json:
           schema:

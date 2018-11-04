@@ -34,14 +34,16 @@ components:
   schemas:
     Board:
       $ref: 'schemas.yml#/Board'
-    Collaboration:
-      $ref: 'schemas.yml#/Collaboration'
+    Collaborators:
+      $ref: 'schemas.yml#/Collaborators'
     Note:
       $ref: 'schemas.yml#/Note'
     Boards:
       $ref: 'schemas.yml#/Boards'
     NoteUpdate:
       $ref: 'schemas.yml#/NoteUpdate'
+    BoardUpdate:
+      $ref: 'schemas.yml#/BoardUpdate'
     Notes:
       $ref: 'schemas.yml#/Notes'
     Attachment:
@@ -52,5 +54,5 @@ components:
       $ref: 'schemas.yml#/Error'
 
 servers:
-- description: SwaggerHub API Auto Mocking
+- description: Development server
   url: http://188.246.233.13:8080/

@@ -2,10 +2,9 @@ post:
   summary: Upload attachment to server
   requestBody:
     content:
-      application/octet-stream:
+      multipart/form-data:
         schema:
-          type: string
-          format: binary
+         $ref: 'schemas.yml#/FileUpload'
   responses:
     '201':
       description: Ok

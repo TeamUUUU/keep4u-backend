@@ -1,6 +1,6 @@
 FROM swaggerapi/swagger-ui:latest
 
-RUN apk add --update nodejs
+RUN apk add --update nodejs npm
 RUN npm install -g swagger-cli
 
 COPY /api /foo

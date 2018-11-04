@@ -2,7 +2,7 @@ package models
 
 type Board struct {
 	ID            string        `json:"id,omitempty" bson:"_id,omitempty"`
-	Collaboration Collaborators `json:"collaborations,omitempty" bson:"collaborations,omitempty"`
+	Collaborators Collaborators `json:"collaborators,omitempty" bson:"collaborators,omitempty"`
 	CreatedAt     int64         `json:"created_at,omitempty" bson:"created_at,omitempty"`
 	ChangedAt     int64         `json:"changed_at,omitempty" bson:"changed_at,omitempty"`
 	BoardCreate   `bson:",inline"`
@@ -23,7 +23,7 @@ type BoardUpdate struct {
 }
 
 type BoardCollaborationUpdate struct {
-	Collaboration Collaborators `json:"collaborations,omitempty" bson:"collaborations,omitempty"`
+	Collaboration Collaborators `json:"collaborators,omitempty" bson:"collaborators,omitempty"`
 }
 
 type Boards []*Board

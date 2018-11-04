@@ -85,7 +85,7 @@ func (bd *BoardsDao) AddCollaborators(boardID string, update models.BoardCollabo
 	for _, collaborator := range update.Collaboration {
 		entries.Append(bson.VC.String(collaborator))
 	}
-	each := bson.EC.SubDocumentFromElements("collaborations", bson.EC.Array("$each", entries))
+	each := bson.EC.SubDocumentFromElements("collaborators", bson.EC.Array("$each", entries))
 	addToSet := bson.EC.SubDocumentFromElements("$addToSet", each)
 	updateChangedAt := bson.EC.SubDocumentFromElements("$set", bson.EC.Int64("changed_at", time.Now().Unix()))
 	res := bd.Collection().FindOneAndUpdate(
@@ -99,7 +99,7 @@ func (bd *BoardsDao) AddCollaborators(boardID string, update models.BoardCollabo
 		bd.Logger.Error("fail to decode a board", zap.Error(err), zap.String("board_id", boardID))
 		return nil, err
 	}
-	return board.Collaboration, nil
+	return board.Collaborators, nil
 }
 
 func (bd *BoardsDao) GetBoardsForUser(ownerid string) (models.Boards, error) {

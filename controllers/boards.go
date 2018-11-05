@@ -15,10 +15,10 @@ func (api *ApiService) CreateBoard(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to parse request"})
 		return
 	}
-	ownerID := ctx.Query("owner_id")
-	if ownerID != "" {
-		api.Logger.Error("owner_id not found")
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "owner_id not found"})
+	ownerID := ctx.Query("user_id")
+	if ownerID == "" {
+		api.Logger.Error("user_id not found")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
 		return
 	}
 	boardCreate.OwnerID = ownerID

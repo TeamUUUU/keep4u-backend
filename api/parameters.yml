@@ -26,7 +26,7 @@ UserID:
   schema:
     type: string
   in: query
-  name: owner_id
+  name: user_id
   required: true
   description: Google ClientID token
 

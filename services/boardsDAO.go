@@ -81,6 +81,13 @@ func (bd *BoardsDao) Delete(boardID string) (error) {
 }
 
 func (bd *BoardsDao) AddCollaborators(boardID string, update models.BoardCollaborationUpdate) (models.Collaborators, error) {
+	if len(update.Collaboration) == 0 {
+		board, err := bd.GetBoardById(boardID)
+		if err != nil {
+			return nil, err
+		}
+		return board.Collaborators, nil
+	}
 	entries := bson.NewArray()
 	for _, collaborator := range update.Collaboration {
 		entries.Append(bson.VC.String(collaborator))

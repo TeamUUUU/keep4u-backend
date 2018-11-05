@@ -10,7 +10,7 @@ type Board struct {
 
 type BoardCreate struct {
 	Title       string `json:"title" bson:"title"`
-	OwnerID     string `json:"owner_id,omitempty" binding:"required" bson:"owner_id,omitempty"`
+	OwnerID     string `json:"owner_id,omitempty" bson:"owner_id,omitempty"`
 	Description string `json:"description,omitempty" bson:"description,omitempty"`
 }
 

@@ -14,11 +14,19 @@ BoardID:
   required: true
   description: UUID of board
 
+OwnerID:
+  schema:
+    type: string
+  in: query
+  name: owner_id
+  required: true
+  description: Google ClientID token
+
 UserID:
   schema:
     type: string
   in: query
-  name: user_id
+  name: owner_id
   required: true
   description: Google ClientID token
 

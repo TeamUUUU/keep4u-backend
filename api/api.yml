@@ -29,6 +29,8 @@ components:
       $ref: 'parameters.yml#/BoardID'
     note_id:
       $ref: 'parameters.yml#/NoteID'
+    owner_id:
+      $ref: 'parameters.yml#/UserID'
     attachment_id:
       $ref: 'parameters.yml#/AttachmentID'
   schemas:

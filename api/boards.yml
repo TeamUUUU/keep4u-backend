@@ -1,7 +1,7 @@
 get:
   summary: Get user boards
   parameters:
-    - $ref: 'parameters.yml#/UserID'
+  - $ref: 'parameters.yml#/UserID'
   description: |
     Gets all boards for current user
   responses:
@@ -21,6 +21,8 @@ post:
   summary: Create new board
   description: |
     Create new board for current user
+  parameters:
+  - $ref: 'parameters.yml#/UserID'
   requestBody:
     content:
       application/json:

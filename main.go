@@ -67,7 +67,7 @@ func main() {
 	boards.GET("", api.GetUserBoards)
 
 	boards.GET("/:board_id", api.GetBoard)
-	boards.PUT("/:board_id", api.UpdateBoard)
+	boards.PATCH("/:board_id", api.UpdateBoard)
 	boards.DELETE("/:board_id", api.DeleteBoard)
 
 	boards.GET("/:board_id/notes", api.GetNotesForBoard)

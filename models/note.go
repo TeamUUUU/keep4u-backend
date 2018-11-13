@@ -12,6 +12,7 @@ type NoteCreate struct {
 	Content     string      `json:"content" bson:"content" binding:"required"`
 	Attachments Attachments `json:"attachments,omitempty" bson:"attachments,omitempty"`
 	BoardID     string      `json:"board_id, omitempty" bson:"board_id,omitempty"`
+	OwnerID     string      `json:"-" bson:"owner_id,omitempty"`
 }
 
 type NoteUpdate struct {

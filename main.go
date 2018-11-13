@@ -3,12 +3,15 @@ package main
 import (
 	"context"
 	"github.com/TeamUUUU/keep4u-backend/controllers"
+	"github.com/TeamUUUU/keep4u-backend/middleware"
 	"github.com/TeamUUUU/keep4u-backend/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"go.uber.org/zap"
+	"google.golang.org/api/oauth2/v2"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -49,6 +52,22 @@ func main() {
 		NotesDAO:  &notesDAO,
 		Logger:    logger,
 	}
+
+	oauthService, err := oauth2.New(&http.Client{})
+	if err != nil {
+		logger.Fatal("fail to create google oauth service", zap.Error(err))
+	}
+	authService := middleware.GoogleAuthMiddleware{
+		Service: oauthService,
+	}
+
+	accessService := services.DocumentAccessService{
+		Db:             client,
+		CollectionName: "access",
+		Database:       "keep4u-backend",
+		Logger:         logger,
+	}
+
 	r := gin.Default()
 	// - Preflight requests cached for 12 hours
 	r.Use(cors.New(cors.Config{
@@ -60,24 +79,29 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	r.Use(authService.Authorization())
 	boards := r.Group("/boards")
 	notes := r.Group("/notes")
 
 	boards.POST("", api.CreateBoard)
+	boardsId := boards.Group("/:board_id")
+	boardsId.Use(middleware.Access(&accessService, "board_id"))
 	boards.GET("", api.GetUserBoards)
 
-	boards.GET("/:board_id", api.GetBoard)
-	boards.PATCH("/:board_id", api.UpdateBoard)
-	boards.DELETE("/:board_id", api.DeleteBoard)
+	boardsId.GET("", api.GetBoard)
+	boardsId.PATCH("", api.UpdateBoard)
+	boardsId.DELETE("", api.DeleteBoard)
 
-	boards.GET("/:board_id/notes", api.GetNotesForBoard)
-	boards.POST("/:board_id/notes", api.CreateNote)
+	boardsId.GET("/notes", api.GetNotesForBoard)
+	boardsId.POST("/notes", api.CreateNote)
 
-	boards.PATCH("/:board_id/collaborators", api.UpdateBoardCollaborators)
+	boardsId.PATCH("/collaborators", api.UpdateBoardCollaborators)
 
-	notes.DELETE("/:note_id", api.DeleteNote)
-	notes.PATCH("/:note_id", api.UpdateNote)
-	notes.GET("/:note_id", api.GetNote)
+	notesId := notes.Group("/:note_id")
+	notesId.Use(middleware.Access(&accessService, "note_id"))
+	notesId.DELETE("", api.DeleteNote)
+	notesId.PATCH("", api.UpdateNote)
+	notesId.GET("", api.GetNote)
 
 	r.Run(":8080")
 }

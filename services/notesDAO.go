@@ -102,3 +102,12 @@ func (nd *NotesDAO) Delete(noteID string) (error) {
 	}
 	return nil
 }
+
+func (nd *NotesDAO) DeleteByBoardId(boardID string) (error) {
+	_, err := nd.Collection().DeleteMany(nil, bson.NewDocument(bson.EC.String("board_id", boardID)))
+	if err != nil {
+		nd.Logger.Error("fail to delete", zap.Error(err), zap.String("board_id", boardID))
+		return err
+	}
+	return nil
+}

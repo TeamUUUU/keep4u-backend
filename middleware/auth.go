@@ -19,7 +19,7 @@ func (gam *GoogleAuthMiddleware) Authorization() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, models.Error{Message: "invalid authorization header"})
 			return
 		}
-		ctx.Set("id_token", &resp)
+		ctx.Set("id_token", resp)
 		ctx.Next()
 	}
 }

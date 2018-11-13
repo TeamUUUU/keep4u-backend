@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"go.uber.org/zap"
+	"google.golang.org/api/oauth2/v2"
 	"net/http"
 )
 
@@ -15,15 +16,21 @@ func (api *ApiService) CreateBoard(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to parse request"})
 		return
 	}
-	ownerID := ctx.Query("user_id")
-	if ownerID == "" {
+	ownerIDraw, exists := ctx.Get("id_token")
+	if !exists {
 		api.Logger.Error("user_id not found")
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
 		return
 	}
+	ownerID := ownerIDraw.(*oauth2.Tokeninfo).UserId
 	boardCreate.OwnerID = ownerID
 	board, err := api.BoardsDAO.Create(&boardCreate)
 	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to create board"})
+		return
+	}
+	if err := api.DocumentAccess.UpdateAccess(&models.Access{UserID: ownerID, Documents: []string{board.ID}});
+		err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to create board"})
 		return
 	}
@@ -109,6 +116,23 @@ func (api *ApiService) DeleteBoard(ctx *gin.Context) {
 	}
 	if err := api.BoardsDAO.Delete(boardID); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to delete board"})
+		return
+	}
+	if err := api.NotesDAO.DeleteByBoardId(boardID); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to delete board notes"})
+		return
+	}
+	ownerIDraw, exists := ctx.Get("id_token")
+	if !exists {
+		api.Logger.Error("user_id not found")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
+		return
+	}
+	ownerID := ownerIDraw.(*oauth2.Tokeninfo).UserId
+	if err := api.DocumentAccess.DropAccess(&models.Access{UserID: ownerID, Documents: []string{boardID}});
+		err != nil {
+		api.Logger.Error("user_id not found")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to drop a board"})
 		return
 	}
 	ctx.Status(http.StatusNoContent)

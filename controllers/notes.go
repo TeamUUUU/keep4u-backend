@@ -4,6 +4,7 @@ import (
 	"github.com/TeamUUUU/keep4u-backend/models"
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/mongo"
+	"google.golang.org/api/oauth2/v2"
 	"net/http"
 )
 
@@ -15,6 +16,13 @@ func (api *ApiService) CreateNote(ctx *gin.Context) {
 		return
 	}
 	noteCreate.BoardID = ctx.Param("board_id")
+	token, exists := ctx.Get("id_token")
+	if !exists {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "id_token expected"})
+		return
+	}
+	tokenInfo := token.(oauth2.Tokeninfo)
+	noteCreate.OwnerID = tokenInfo.UserId
 	note, err := api.NotesDAO.Create(&noteCreate)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "unable to create note"})

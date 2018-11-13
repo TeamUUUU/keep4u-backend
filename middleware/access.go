@@ -16,7 +16,7 @@ func Access(accessService *services.DocumentAccessService, param string) gin.Han
 			return
 		}
 
-		tokenInfo := token.(oauth2.Tokeninfo)
+		tokenInfo := token.(*oauth2.Tokeninfo)
 
 		docId := ctx.Param(param)
 		hasAccess, err := accessService.CheckAccess(&models.Access{UserID: tokenInfo.UserId, Documents: []string{docId}})

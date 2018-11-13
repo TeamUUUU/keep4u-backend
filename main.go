@@ -20,7 +20,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client, err := mongo.NewClient("mongodb://mongo:27017")
+	client, err := mongo.NewClient("mongodb://localhost:27017")
 	if err != nil {
 		logger.Fatal("fail to setup mongo client", zap.Error(err))
 	}
@@ -47,10 +47,17 @@ func main() {
 		Database:       "keep4u-backend",
 		Logger:         logger,
 	}
+	accessService := services.DocumentAccessService{
+		Db:             client,
+		CollectionName: "access",
+		Database:       "keep4u-backend",
+		Logger:         logger,
+	}
 	api := controllers.ApiService{
-		BoardsDAO: &boardsDao,
-		NotesDAO:  &notesDAO,
-		Logger:    logger,
+		BoardsDAO:      &boardsDao,
+		NotesDAO:       &notesDAO,
+		Logger:         logger,
+		DocumentAccess: &accessService,
 	}
 
 	oauthService, err := oauth2.New(&http.Client{})
@@ -59,13 +66,6 @@ func main() {
 	}
 	authService := middleware.GoogleAuthMiddleware{
 		Service: oauthService,
-	}
-
-	accessService := services.DocumentAccessService{
-		Db:             client,
-		CollectionName: "access",
-		Database:       "keep4u-backend",
-		Logger:         logger,
 	}
 
 	r := gin.Default()

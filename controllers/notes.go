@@ -21,11 +21,16 @@ func (api *ApiService) CreateNote(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "id_token expected"})
 		return
 	}
-	tokenInfo := token.(oauth2.Tokeninfo)
+	tokenInfo := token.(*oauth2.Tokeninfo)
 	noteCreate.OwnerID = tokenInfo.UserId
 	note, err := api.NotesDAO.Create(&noteCreate)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "unable to create note"})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to create note"})
+		return
+	}
+	if err := api.DocumentAccess.UpdateAccess(&models.Access{UserID: tokenInfo.UserId, Documents: []string{note.ID}});
+		err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{Message: "fail to create note"})
 		return
 	}
 	ctx.JSON(http.StatusCreated, note)
@@ -98,6 +103,19 @@ func (api *ApiService) DeleteNote(ctx *gin.Context) {
 			return
 		}
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, models.Error{"fail to delete note"})
+		return
+	}
+	ownerIDraw, exists := ctx.Get("id_token")
+	if !exists {
+		api.Logger.Error("user_id not found")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
+		return
+	}
+	ownerID := ownerIDraw.(*oauth2.Tokeninfo).UserId
+	if err := api.DocumentAccess.DropAccess(&models.Access{UserID: ownerID, Documents: []string{noteID}});
+		err != nil {
+		api.Logger.Error("user_id not found")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "fail to drop a board"})
 		return
 	}
 	ctx.Status(http.StatusNoContent)

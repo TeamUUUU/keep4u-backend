@@ -6,7 +6,8 @@ import (
 )
 
 type ApiService struct {
-	BoardsDAO *services.BoardsDao
-	NotesDAO  *services.NotesDAO
-	Logger    *zap.Logger
+	BoardsDAO      *services.BoardsDao
+	NotesDAO       *services.NotesDAO
+	DocumentAccess *services.DocumentAccessService
+	Logger         *zap.Logger
 }

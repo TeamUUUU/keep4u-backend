@@ -21,20 +21,50 @@ func (das *DocumentAccessService) Collection() *mongo.Collection {
 }
 
 func (das *DocumentAccessService) UpdateAccess(access *models.Access) error {
+	documents := bson.NewArray()
+	for _, doc := range access.Documents {
+		documents.Append(bson.VC.String(doc))
+	}
 	_, err := das.Collection().UpdateOne(nil,
 		bson.NewDocument(bson.EC.String("_id", access.UserID)),
 		bson.NewDocument(
-			bson.EC.SubDocumentFromElements("$set",
-				bson.EC.Interface("documents", access.Documents),
+			bson.EC.SubDocumentFromElements("$addToSet",
+				bson.EC.SubDocumentFromElements("documents",
+					bson.EC.Array("$each", documents),
+				),
 			),
 			bson.EC.SubDocumentFromElements("$setOnInsert",
 				bson.EC.String("_id", access.UserID),
-				bson.EC.Interface("documents", access.Documents)),
+			),
 		),
 		updateopt.Upsert(true),
 	)
 	if err != nil {
 		das.Logger.Error("fail to update access", zap.Error(err))
+	}
+	return err
+}
+
+func (das *DocumentAccessService) DropAccess(access *models.Access) error {
+	documents := bson.NewArray()
+	for _, doc := range access.Documents {
+		documents.Append(bson.VC.String(doc))
+	}
+	_, err := das.Collection().UpdateOne(nil,
+		nil,
+		bson.NewDocument(
+			bson.EC.SubDocumentFromElements("$pull",
+				bson.EC.SubDocumentFromElements("documents",
+					bson.EC.Array("$in", documents),
+				),
+			),
+			bson.EC.SubDocumentFromElements("$setOnInsert",
+				bson.EC.String("_id", access.UserID),
+			),
+		),
+	)
+	if err != nil {
+		das.Logger.Error("fail to drop access", zap.Error(err))
 	}
 	return err
 }

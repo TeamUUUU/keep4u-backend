@@ -8,8 +8,8 @@ type Note struct {
 }
 
 type NoteCreate struct {
-	Title       string      `json:"title" bson:"title" binding:"required"`
-	Content     string      `json:"content" bson:"content" binding:"required"`
+	Title       string      `json:"title" bson:"title"`
+	Content     string      `json:"content" bson:"content"`
 	Attachments Attachments `json:"attachments,omitempty" bson:"attachments,omitempty"`
 	BoardID     string      `json:"board_id, omitempty" bson:"board_id,omitempty"`
 	OwnerID     string      `json:"-" bson:"owner_id,omitempty"`

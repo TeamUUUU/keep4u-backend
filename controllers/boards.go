@@ -38,7 +38,13 @@ func (api *ApiService) CreateBoard(ctx *gin.Context) {
 }
 
 func (api *ApiService) GetUserBoards(ctx *gin.Context) {
-	userID := ctx.Query("user_id")
+	ownerIDraw, exists := ctx.Get("id_token")
+	if !exists {
+		api.Logger.Error("user_id not found")
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
+		return
+	}
+	userID := ownerIDraw.(*oauth2.Tokeninfo).UserId
 	if userID == "" {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, models.Error{Message: "user_id parameter missing"})
 		return

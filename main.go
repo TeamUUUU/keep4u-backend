@@ -73,7 +73,7 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"https://188.246.233.13",  "https://keep4u.space", "http://keep4u.space","http://188.246.233.13", "http://188.246.233.13:8082", "https://188.246.233.13:8082", "http://localhost:8080", "http://localhost:3000"},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,

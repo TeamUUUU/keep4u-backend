@@ -2,6 +2,7 @@ get:
   summary: Get attachment info by id
   parameters:
   - $ref: 'parameters.yml#/AttachmentID'
+  - $ref: 'parameters.yml#/UserID'
   responses:
     '200':
       description: Ok
@@ -19,6 +20,7 @@ delete:
   summary: Delete attachment info by id
   parameters:
   - $ref: 'parameters.yml#/AttachmentID'
+  - $ref: 'parameters.yml#/UserID'
   responses:
     '204':
       description: Ok

@@ -1,5 +1,7 @@
 patch:
   description: Adds collaborators to board. Returns all board's collaborators.
+  parameters:
+  - $ref: 'parameters.yml#/UserID'
   requestBody:
     content:
       application/json:

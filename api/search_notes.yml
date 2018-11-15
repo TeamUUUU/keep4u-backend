@@ -8,6 +8,7 @@ get:
       minLength: 5
       maxLength: 50
     required: true
+  - $ref: 'parameters.yml#/UserID'
   - in: query
     name: limit
     schema:

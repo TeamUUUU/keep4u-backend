@@ -2,6 +2,7 @@ get:
   summary: Get note by id
   parameters:
   - $ref: 'parameters.yml#/NoteID'
+  - $ref: 'parameters.yml#/UserID'
   responses:
     '200':
       description: Ok
@@ -20,6 +21,7 @@ patch:
   summary: Update note content
   parameters:
   - $ref: 'parameters.yml#/NoteID'
+  - $ref: 'parameters.yml#/UserID'
   requestBody:
     content:
       application/json:
@@ -43,6 +45,7 @@ delete:
   summary: Delete note by id
   parameters:
   - $ref: 'parameters.yml#/NoteID'
+  - $ref: 'parameters.yml#/UserID'
   responses:
     '204':
       description: Ok

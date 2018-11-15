@@ -1,10 +1,12 @@
 post:
   summary: Upload attachment to server
+  parameters:
+  - $ref: 'parameters.yml#/UserID'
   requestBody:
     content:
       multipart/form-data:
         schema:
-         $ref: 'schemas.yml#/FileUpload'
+          $ref: 'schemas.yml#/FileUpload'
   responses:
     '201':
       description: Ok

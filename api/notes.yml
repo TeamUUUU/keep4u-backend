@@ -1,5 +1,7 @@
 get:
   summary: Get notes for board
+  parameters:
+  - $ref: 'parameters.yml#/UserID'
   responses:
     '200':
       description: Ok
@@ -15,6 +17,8 @@ get:
             $ref: 'schemas.yml#/Error'
 post:
   summary: Create new note on board
+  parameters:
+  - $ref: 'parameters.yml#/UserID'
   requestBody:
     content:
       application/json:

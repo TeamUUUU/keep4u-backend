@@ -21,6 +21,7 @@ patch:
   summary: Update board parameters
   parameters:
   - $ref: 'parameters.yml#/BoardID'
+  - $ref: 'parameters.yml#/UserID'
   description: |
     Update board parameters. Note: collaborators array will be replaced by this method.
     Use /boards/{board_id}/collaborators if you want to append collaborators to board.
@@ -47,6 +48,7 @@ delete:
   summary: Delete board by id
   parameters:
   - $ref: 'parameters.yml#/BoardID'
+  - $ref: 'parameters.yml#/UserID'
   responses:
     '204':
       description: Ok
